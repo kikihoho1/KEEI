@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>출장규정 안내 및 출장비 계산 시트</title>
+  <style>
+    /* 기본 스타일 (공통) */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    /* 본문 및 배경 */
+    body {
+      background-color: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
+      /* 업데이트된 계산 시트의 배경 적용 */
+      background: linear-gradient(to bottom right, #e0f7fa, #f1f8e9);
+      padding-top: 80px;
+    }
+    
+    /* 네비게이션 바 */
+    .navbar {
+      width: 100%;
+      background: #0078D7;
+      color: white;
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    
+    .navbar .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    
+    /* 출장규정 내용 컨테이너 */
+    .container {
+      max-width: 800px;
+      margin: 120px auto 40px;
+      padding: 20px 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+    
+    .container h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    
+    .container h2 {
+      font-size: 1.5em;
+      margin: 20px 0 10px;
+      color: #0078D7;
+    }
+    
+    .container p {
+      margin: 10px 0;
+      font-size: 1em;
+    }
+    
+    .container ul {
+      list-style: disc;
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+      .container {
+        margin: 100px 20px;
+        padding: 20px;
+      }
+    }
+    
+    /* ===== 업데이트된 출장비 계산 시트 스타일 ===== */
+    .calc-container {
+      max-width: 800px;
+      margin: 0 auto 40px;
+      padding: 20px 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      margin-bottom: 40px;
+    }
+    .calc-container h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #0078D7;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .calculator-form {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calc-row {
+      display: table-row;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .calc-row:last-child {
+      border-bottom: none;
+    }
+    .calc-label, .calc-input {
+      display: table-cell;
+      padding: 12px 8px;
+      vertical-align: middle;
+    }
+    .calc-label {
+      width: 35%;
+      text-align: right;
+      padding-right: 15px;
+      font-weight: bold;
+      color: #555;
+    }
+    .calc-input {
+      width: 65%;
+    }
+    .calc-input select,
+    .calc-input input {
+      width: 90%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border 0.2s ease;
+    }
+    .calc-input select:focus,
+    .calc-input input:focus {
+      border-color: #0078D7;
+      outline: none;
+    }
+    .calc-input .small-select {
+      width: auto;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .calculator button {
+      padding: 12px 24px;
+      background: #0078D7;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1em;
+    }
+    .calculator button:hover {
+      background: #005BB5;
+    }
+    .result {
+      margin-top: 30px;
+      font-weight: bold;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f9f9f9;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .calc-label {
+        text-align: left;
+        padding-bottom: 5px;
+      }
+      .calc-input {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <nav class="navbar">
+    <div class="logo">MyWebsite</div>
+  </nav>
+  
+  <!-- 출장규정 내용 컨테이너 (변경 없음) -->
+  <div class="container">
+    <h1> 출장규정(3500) 주요 내용 안내</h1>
+    <p>안녕하십니까?<br>
+       출장규정(3500)에 대해 안내드립니다.</p>
+    
+    <h2>1. 출장의 개념</h2>
+    <p>
+      출장은 연구 및 업무 수행을 위해 국내외 특정 지역을 방문하는 것을 의미합니다. 연구원은 출장 시 발생하는 경비를 효율적으로 관리하기 위해 출장규정을 운영하고 있습니다.
+    </p>
+    
+    <h2>2. 출장 승인 절차</h2>
+    <p><strong>국내출장</strong></p>
+    <ul>
+      <li>출장 전 출장계획서를 제출하고 승인을 받아야 합니다.</li>
+      <li>출장 후 출장보고서를 작성하여 제출해야 합니다.</li>
+    </ul>
+    <p><strong>국외출장</strong></p>
+    <ul>
+      <li>사전에 출장 목적 및 필요성을 검토받고 승인을 받아야 합니다.</li>
+      <li>일정 및 예산 등을 상세히 기재한 후 출장 심의를 거쳐 최종 승인됩니다.</li>
+      <li>국외출장 후에는 출장 결과보고서를 제출해야 합니다.</li>
+    </ul>
+    
+    <h2>3. 출장비 지급 기준</h2>
+    <p>
+      출장비는 출장의 성격 및 거리, 체류 기간 등을 고려하여 지급됩니다.
+    </p>
+    <p><strong>교통비</strong></p>
+    <ul>
+      <li>일반적으로 기차, 고속버스, 항공기, 선박 등 공공교통수단을 이용하는 경우 지급됩니다.</li>
+      <li>출장 목적 수행을 위해 부득이한 경우에는 자가용 사용이 인정될 수 있습니다.</li>
+    </ul>
+    <p><strong>숙박비</strong></p>
+    <ul>
+      <li>출장 지역 및 체류 기간에 따라 실비 기준으로 지급됩니다.</li>
+      <li>연구원의 숙박비 책정 기준을 준수하여 정산해야 합니다.</li>
+    </ul>
+    <p><strong>일비 및 식비</strong></p>
+    <p>
+      일정 금액이 지급되며, 지역별 차등 적용될 수 있습니다.
+    </p>
+    <p><strong>기타 경비</strong></p>
+    <p>
+      업무 수행을 위한 기타 필요 경비가 발생할 경우 출장 전 사전 승인 후 집행 가능합니다.
+    </p>
+    
+    <h2>4. 동행출장 여비 조정</h2>
+    <p>
+      같은 목적의 출장일 경우, 타 기관 소속 직원과 함께 출장을 진행할 수 있으며 여비를 일부 조정할 수 있습니다.<br>
+      출장 수행에 있어 숙식을 함께 해야 하는 경우, 필요에 따라 여비 등급을 조정할 수 있습니다.
+    </p>
+    
+    <h2>5. 출장 중 연차휴가 사용 가능 여부</h2>
+    <p>
+      해외출장 시, 출장 전후 총 7일 범위 내에서 연차휴가 사용이 가능합니다.<br>
+      연차휴가를 사용할 경우 출장 신청서에 연차휴가 사용 여부를 반드시 명기해야 합니다.
+    </p>
+    
+    <p>
+      본 내용은 연구원의 출장 운영과 관련된 주요 사항이오니 참고하여 주시기 바랍니다.<br>
+      기타 문의사항이 있으시면 운영지원팀으로 문의해 주시기 바랍니다.
+    </p>
+    
+    <p>감사합니다.</p>
+  </div>
+  
+  <!-- 업데이트된 출장비 계산 시트 컨테이너 -->
+  <div class="calc-container">
+    <h1>출장비 계산 시트</h1>
+    <div class="calculator">
+      <form class="calculator-form">
+        <!-- 직급 선택 -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="rank">직급 선택:</label></div>
+          <div class="calc-input">
+            <select id="rank" onchange="updateTransportOptions()">
+              <option value="">-- 선택 --</option>
+              <option value="1">1그룹: 임원</option>
+              <option value="2">2그룹: 부원장</option>
+              <option value="3">3그룹: 선임연구위원, 연구위원, 책임행정원</option>
+              <option value="4">4그룹: 부연구위원, 선임행정원</option>
+              <option value="5">5그룹: 전문연구원, 연구원, 행정원, 전문원, 관리원, 사무원, 기술원</option>
+            </select>
+          </div>
+        </div>
+        <!-- 교통수단 선택 -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="transport">교통수단 선택:</label></div>
+          <div class="calc-input">
+            <select id="transport" onchange="handleTransportChange()">
+              <option value="">-- 직급을 먼저 선택하세요 --</option>
+            </select>
+          </div>
+        </div>
+        <!-- 자동차 옵션 (자동차 선택 시 드롭다운: 동승/유종) -->
+        <div class="calc-row hidden" id="carOptionRow">
+          <div class="calc-label"><label for="carOptionSelect">자동차 옵션:</label></div>
+          <div class="calc-input">
+            <select id="carOptionSelect" onchange="handleCarOptionChange()">
+              <option value="">-- 선택 --</option>
+              <option value="shared">동승</option>
+              <option value="fuel">유종</option>
+            </select>
+          </div>
+        </div>
+        <!-- 연료종류 (유종 선택 시) -->
+        <div class="calc-row hidden" id="fuelRow">
+          <div class="calc-label"><label for="fuelType">연료 종류:</label></div>
+          <div class="calc-input">
+            <select id="fuelType">
+              <option value="gasoline">휘발유</option>
+              <option value="diesel">경유</option>
+              <option value="lpg">LPG</option>
+              <option value="eco">친환경차량</option>
+            </select>
+          </div>
+        </div>
+        <!-- 여행거리 (유종 선택 시) -->
+        <div class="calc-row hidden" id="distanceRow">
+          <div class="calc-label"><label for="travelDistance">여행거리 (km):</label></div>
+          <div class="calc-input">
+            <input type="number" id="travelDistance" min="0">
+          </div>
+        </div>
+        <!-- 자동차가 아닌 경우, 실제 교통비 입력 -->
+        <div class="calc-row" id="transportCostRow">
+          <div class="calc-label"><label for="transportCost">실제 교통비 (원):</label></div>
+          <div class="calc-input">
+            <input type="number" id="transportCost" min="0">
+          </div>
+        </div>
+        <!-- 출장 일수 -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="days">출장 일수:</label></div>
+          <div class="calc-input">
+            <input type="number" id="days" min="1">
+          </div>
+        </div>
+        <!-- 회의비 사용 횟수 -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="meetings">회의비 사용 횟수:</label></div>
+          <div class="calc-input">
+            <input type="number" id="meetings" min="0">
+          </div>
+        </div>
+        <!-- 숙박비 (실제 발생 숙박비 입력) -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="accommodationCost">실제 숙박비 (원):</label></div>
+          <div class="calc-input">
+            <input type="number" id="accommodationCost" min="0">
+          </div>
+        </div>
+        <!-- 기타 발생 금액 (하나의 선택 박스로 통합) -->
+        <div class="calc-row">
+          <div class="calc-label"><label for="extraCostType">기타 발생 금액:</label></div>
+          <div class="calc-input">
+            <select id="extraCostType" onchange="handleExtraCostTypeChange()">
+              <option value="">-- 선택 없음 --</option>
+              <option value="taxi">택시비</option>
+              <option value="parking">주차비</option>
+            </select>
+          </div>
+        </div>
+        <!-- 택시비 선택 시: 택시 구분 (상행, 하행, 모두) -->
+        <div class="calc-row hidden" id="taxiOptionRow">
+          <div class="calc-label"><label for="taxiOption">택시 구분:</label></div>
+          <div class="calc-input">
+            <select id="taxiOption" onchange="handleTaxiOptionChange()">
+              <option value="">-- 선택 --</option>
+              <option value="up">상행</option>
+              <option value="down">하행</option>
+              <option value="both">모두</option>
+            </select>
+          </div>
+        </div>
+        <!-- 택시비 입력 (상행) -->
+        <div class="calc-row hidden" id="taxiUpRow">
+          <div class="calc-label"><label for="taxiUp">택시 상행 (원):</label></div>
+          <div class="calc-input">
+            <input type="number" id="taxiUp" min="0">
+          </div>
+        </div>
+        <!-- 택시비 입력 (하행) -->
+        <div class="calc-row hidden" id="taxiDownRow">
+          <div class="calc-label"><label for="taxiDown">택시 하행 (원):</label></div>
+          <div class="calc-input">
+            <input type="number" id="taxiDown" min="0">
+          </div>
+        </div>
+      </form>
+      <!-- 계산하기 버튼 -->
+      <button onclick="calculate()">계산하기</button>
+      <!-- 결과 출력 -->
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+  
+  <script>
+    // [1] 직급에 따른 교통수단 옵션 업데이트
+    function updateTransportOptions() {
+      const rank = document.getElementById('rank').value;
+      const transportSelect = document.getElementById('transport');
+      transportSelect.innerHTML = '<option value="">-- 선택 --</option>';
+      if (rank === "1" || rank === "2" || rank === "3" || rank === "4" || rank === "5") {
+        transportSelect.innerHTML += `
+          <option value="railway_실비">철도(실비)</option>
+          <option value="air_실비">항공(실비)</option>
+          <option value="ship_실비">선박(실비)</option>
+          <option value="car_실비">자동차(실비)</option>
+        `;
+      }
+      // 자동차 관련 옵션 초기화
+      document.getElementById('carOptionRow').classList.add('hidden');
+      document.getElementById('fuelRow').classList.add('hidden');
+      document.getElementById('distanceRow').classList.add('hidden');
+      document.getElementById('transportCostRow').style.display = "";
+    }
+    
+    // [2] 교통수단 선택 변경 시 처리 (자동차 선택 시 옵션 표시)
+    function handleTransportChange() {
+      const transport = document.getElementById('transport').value;
+      if (transport === "car_실비") {
+        // 자동차 선택 시, 실제 교통비 입력 숨기고 자동차 옵션 드롭다운 표시
+        document.getElementById('carOptionRow').classList.remove('hidden');
+        document.getElementById('transportCostRow').style.display = "none";
+      } else {
+        // 자동차가 아닌 경우, 옵션 숨김 및 실제 교통비 입력 표시
+        document.getElementById('carOptionRow').classList.add('hidden');
+        document.getElementById('fuelRow').classList.add('hidden');
+        document.getElementById('distanceRow').classList.add('hidden');
+        document.getElementById('transportCostRow').style.display = "";
+      }
+    }
+    
+    // [3] 자동차 옵션 변경 (동승 vs 유종)
+    function handleCarOptionChange() {
+      const option = document.getElementById('carOptionSelect').value;
+      if(option === "fuel"){
+        document.getElementById('fuelRow').classList.remove('hidden');
+        document.getElementById('distanceRow').classList.remove('hidden');
+      } else {
+        document.getElementById('fuelRow').classList.add('hidden');
+        document.getElementById('distanceRow').classList.add('hidden');
+      }
+    }
+    
+    // [4] 기타 발생 금액 선택 변경
+    function handleExtraCostTypeChange() {
+      const type = document.getElementById('extraCostType').value;
+      // 초기화: 택시 옵션과 입력란 숨김
+      document.getElementById('taxiOptionRow').classList.add('hidden');
+      document.getElementById('taxiUpRow').classList.add('hidden');
+      document.getElementById('taxiDownRow').classList.add('hidden');
+      if(type === "taxi"){
+        document.getElementById('taxiOptionRow').classList.remove('hidden');
+      } else if(type === "parking"){
+        // 주차비 선택 시, 단순 금액 입력만 표시 (별도의 입력필드가 필요한 경우 추가 가능)
+      }
+    }
+    
+    // [5] 택시 옵션 변경: 상행, 하행, 또는 모두에 따라 입력란 표시
+    function handleTaxiOptionChange() {
+      const taxiOpt = document.getElementById('taxiOption').value;
+      // 먼저 모든 택시 입력란 숨김
+      document.getElementById('taxiUpRow').classList.add('hidden');
+      document.getElementById('taxiDownRow').classList.add('hidden');
+      if(taxiOpt === "up"){
+        document.getElementById('taxiUpRow').classList.remove('hidden');
+      } else if(taxiOpt === "down"){
+        document.getElementById('taxiDownRow').classList.remove('hidden');
+      } else if(taxiOpt === "both"){
+        document.getElementById('taxiUpRow').classList.remove('hidden');
+        document.getElementById('taxiDownRow').classList.remove('hidden');
+      }
+    }
+    
+    // [6] 계산 함수
+    function calculate() {
+      const rank = document.getElementById('rank').value;
+      const transport = document.getElementById('transport').value;
+      const days = parseInt(document.getElementById('days').value) || 0;
+      const meetings = parseInt(document.getElementById('meetings').value) || 0;
+      
+      // 기본 상수 (계산 근거)
+      const baseDaily = 25000;      // 일비 기본
+      const mealAllowance = 25000;  // 식비
+      const meetingDeduction = 8330; // 회의비 공제
+      
+      // 일비 감액 조건: 자동차 동승 또는 택시비 사용 시 감액
+      let dailyFactor = 1;
+      const carOption = document.getElementById('carOptionSelect').value;
+      const extraType = document.getElementById('extraCostType').value;
+      const taxiOption = document.getElementById('taxiOption').value;
+      if(transport === "car_실비" && carOption === "shared") {
+        dailyFactor = 0.5;
+      } else if(extraType === "taxi" && taxiOption !== "") {
+        dailyFactor = 0.5;
+      }
+      
+      const adjustedDaily = ((baseDaily * dailyFactor) + mealAllowance) * days;
+      
+      // 교통비 계산 (원단위 절사)
+      let transportCost = 0;
+      if(transport === "car_실비"){
+        if(carOption === "shared"){
+          transportCost = 0;
+        } else if(carOption === "fuel"){
+          const fuelType = document.getElementById('fuelType').value;
+          const travelDistance = parseFloat(document.getElementById('travelDistance').value) || 0;
+          let fuelEconomy = 0, fuelPrice = 0;
+          if(fuelType === "gasoline"){
+            fuelEconomy = 13.30;
+            fuelPrice = 1733.12;
+          } else if(fuelType === "diesel"){
+            fuelEconomy = 14.30;
+            fuelPrice = 1597.36;
+          } else if(fuelType === "lpg" || fuelType === "eco"){
+            fuelEconomy = 9.77;
+            fuelPrice = 1073.05;
+          }
+          transportCost = travelDistance * (fuelPrice / fuelEconomy);
+        } else {
+          transportCost = 0;
+        }
+      } else {
+        transportCost = parseFloat(document.getElementById('transportCost').value) || 0;
+      }
+      transportCost = Math.floor(transportCost); // 원단위 절사
+      
+      // 숙박비: 4~5그룹은 상한액 100,000원 적용
+      let accommodationCost = parseFloat(document.getElementById('accommodationCost').value) || 0;
+      if(rank === "4" || rank === "5"){
+        if(accommodationCost > 100000) {
+          accommodationCost = 100000;
+        }
+      }
+      
+      // 기타 발생 금액 계산 (택시비 또는 주차비)
+      let extraCost = 0;
+      if(extraType === "taxi"){
+        let taxiUp = 0, taxiDown = 0;
+        if(taxiOption === "up"){
+          taxiUp = parseFloat(document.getElementById('taxiUp').value) || 0;
+          if(taxiUp > 25000) taxiUp = 25000;
+          extraCost = taxiUp;
+        } else if(taxiOption === "down"){
+          taxiDown = parseFloat(document.getElementById('taxiDown').value) || 0;
+          if(taxiDown > 25000) taxiDown = 25000;
+          extraCost = taxiDown;
+        } else if(taxiOption === "both"){
+          taxiUp = parseFloat(document.getElementById('taxiUp').value) || 0;
+          taxiDown = parseFloat(document.getElementById('taxiDown').value) || 0;
+          if(taxiUp > 25000) taxiUp = 25000;
+          if(taxiDown > 25000) taxiDown = 25000;
+          extraCost = taxiUp + taxiDown;
+        }
+      } else if(extraType === "parking"){
+        // 주차비의 경우, 별도의 입력 필드가 없으면 0으로 처리
+        extraCost = 0;
+      }
+      
+      // 회의비 공제
+      const meetingTotalDeduction = meetingDeduction * meetings;
+      
+      // 최종 합계액 계산
+      const total = adjustedDaily + transportCost + accommodationCost + extraCost - meetingTotalDeduction;
+      
+      // 계산 근거 텍스트 구성
+      let fuelCalculation = "";
+      if(transport === "car_실비" && carOption === "fuel"){
+        const fuelType = document.getElementById('fuelType').value;
+        const travelDistance = parseFloat(document.getElementById('travelDistance').value) || 0;
+        let fuelEconomy = 0, fuelPrice = 0;
+        if(fuelType === "gasoline"){
+          fuelEconomy = 13.30;
+          fuelPrice = 1733.12;
+        } else if(fuelType === "diesel"){
+          fuelEconomy = 14.30;
+          fuelPrice = 1597.36;
+        } else if(fuelType === "lpg" || fuelType === "eco"){
+          fuelEconomy = 9.77;
+          fuelPrice = 1073.05;
+        }
+        fuelCalculation = `여행거리 × (유가/연비) = ${travelDistance} km × (${fuelPrice}원 / ${fuelEconomy})`;
+      }
+      
+      const resultText = `
+        <p>※ 교통수단: ${transport} ${transport==="car_실비" ? "(자동차)" : ""}</p>
+        <p>교통비: ${transportCost.toLocaleString()}원</p>
+        <p>숙박비: ${accommodationCost.toLocaleString()}원</p>
+        <p>일일 지급액 (일비+식비): ${adjustedDaily.toLocaleString()}원</p>
+        <p>기타 발생 금액: ${extraCost.toLocaleString()}원</p>
+        <p>회의비 공제: ${meetingTotalDeduction.toLocaleString()}원</p>
+        <hr>
+        <p><strong>계산 근거:</strong></p>
+        <p>기본 일비: ${baseDaily.toLocaleString()}원, 식비: ${mealAllowance.toLocaleString()}원, 출장일수: ${days}일 (감액계수: ${dailyFactor})</p>
+        <p>교통비 산식: ${fuelCalculation ? fuelCalculation : (transport !== "car_실비" ? "사용자 입력값" : "옵션에 따라 산출")}</p>
+        <p>회의비 공제: ${meetingDeduction.toLocaleString()}원 × ${meetings}회</p>
+        <hr>
+        <p><strong>최종 합계액: ${total.toLocaleString()}원</strong></p>
+      `;
+      
+      document.getElementById('result').innerHTML = resultText;
+    }
+  </script>
+</body>
+</html>
